@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Live Poll</title>
+    <link rel="stylesheet" href="boot4/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <div style="background:black;color: white" class="p-2">
+                <img src="images/live.gif" alt="" width="50px" class="img-fluid">
+                <span>&nbsp; POLL</span>
+        </div>
+    </header>
+    <div class="jumbotron">
+        <h3 class="text-center " >Total Votes <span id="tvotes" class="shadow-lg p-2 mb-5 rounded" style="font-family:Oxygen;background: cadetblue">Wait...</span></h3><br>
+        
+
+        <div class="row">
+            <div class="col-6 text-center">
+                <img src="images/bjp.png" alt="" height="150px" width="150px">
+                <br><br>
+                <span id="bjpid" class="shadow-lg p-3 mb-5 rounded" style="font-family:Oxygen;background: #dc63cb">Wait..</span><br><br>
+                <button class="btn btn-primary" onclick="bjpcount()">BJP <img src="images/vote.png" alt="" height="20px"></button>
+            </div>
+            <div class="col-6 text-center">
+                <img src="images/congress.png" alt="" height="150px" width="150px"><br><br>
+                <span id="congressid" class="shadow-lg p-3 mb-5 rounded" style="font-family:Oxygen;background: #dc63cb">Wait...
+                </span><br><br>
+                <button class="btn btn-primary" onclick="congresscount()">INC <img src="images/vote.png" alt="" height="20px">
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- <div id="chartContainer" style="height: 300px; width: 100%;"></div> -->
+    
+    
+    
+    
+    
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAL4rIsJnZV1K7T1icJDBVTn0-FmqoFBwU",
+            authDomain: "fir-basic-5eee1.firebaseapp.com",
+            databaseURL: "https://fir-basic-5eee1.firebaseio.com",
+            projectId: "fir-basic-5eee1",
+            storageBucket: "fir-basic-5eee1.appspot.com",
+            messagingSenderId: "621557581753"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="auth.js"></script>
+    <script>
+        var vote ;
+
+        db = firebase.database();
+        db.ref('congress').on('value',doc => {
+            congressvote= doc.val();
+            document.getElementById('congressid').innerHTML= congressvote;
+            document.getElementById('tvotes').innerHTML=bjpvote+congressvote;
+        });
+
+        db.ref('bjp').on('value',doc=>{
+            bjpvote = doc.val();
+            if(bjpvote)
+                document.getElementById('bjpid').innerHTML= bjpvote;
+                document.getElementById('tvotes').innerHTML=bjpvote+congressvote;
+        });
+        function congresscount(){
+            congressvote++;
+            db.ref('congress').set(congressvote);
+        }
+        function bjpcount(){
+            bjpvote++;
+            db.ref('bjp').set(bjpvote);
+        }
+    </script>
+    <!-- <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    <script src="chart.js"></script> -->
+    <script src="boot4/js/bootstrap.min.js"></script>
+</body>
+</html>
